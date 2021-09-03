@@ -65,11 +65,13 @@ const Statistics = ({ good, neutral, bad }) => {
             <StatisticsLine text="all" stats={good + neutral + bad} />
             <StatisticsLine
               text="average"
-              stats={(good * 1 + bad * -1) / (good + neutral + bad)}
+              stats={((good * 1 + bad * -1) / (good + neutral + bad)).toFixed(
+                2
+              )}
             />
             <StatisticsLine
               text="positive"
-              stats={good * (100 / (good + neutral + bad))}
+              stats={(good * (100 / (good + neutral + bad))).toFixed(2)}
             />
           </tbody>
         </table>
