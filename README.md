@@ -7,7 +7,7 @@
 
 Sections also include material on:
 
-- State Managment with Redux,
+- State Management with Redux
 - React Router
 - Custom Hooks
 - Webpack
