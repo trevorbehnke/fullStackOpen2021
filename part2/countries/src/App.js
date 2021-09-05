@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-function App() {
+const App = () => {
+  const [countries, setCountries] = useState([]);
+  const [filtered, setFiltered] = useState("");
+
+  useEffect(() => {
+    axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
+      setCountries(response.data);
+    });
+  }, []);
+
+  const handleChange = (event) => {
+    setFiltered(event.target.value);
+  };
+
+  const countriesToShow = countries.filter((country) => {
+    return country.name.toLowerCase().includes(filtered.toLowerCase());
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      find countries
+      <input value={filtered} onChange={handleChange} />
+      {(() => {
+        if (filtered === "") {
+          return <div></div>;
+        } else if (countriesToShow.length > 10) {
+          return <div>Too many matches, specify another filter</div>;
+        } else if (countriesToShow.length > 1 && countriesToShow.length <= 10) {
+          return countriesToShow.map((country) => {
+            return <div key={country.name}>{country.name}</div>;
+          });
+        } else {
+          // Pick Up Here!!!
+          return <div>There is 1 remaining</div>;
+        }
+      })()}
     </div>
   );
-}
+};
 
 export default App;
