@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+
+import personService from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,8 +12,8 @@ const App = () => {
   const [filtered, setFiltered] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
     });
   }, []);
 
@@ -22,18 +23,24 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    if (
-      persons
-        .map((person) => {
-          return person.name.includes(newName);
-        })
-        .includes(true)
-    ) {
+    if (persons.find((person) => person.name === newName)) {
       alert(`${newName} is already added`);
     } else {
-      setPersons(persons.concat(personObject));
-      setNewName("");
-      setNewNumber("");
+      personService.create(personObject).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+      });
+    }
+  };
+
+  const deletePerson = (id) => {
+    const result = window.confirm(`Delete ${id}?`);
+    if (result === true) {
+      personService.remove(id);
+      personService.getAll().then((newPersons) => {
+        setPersons(newPersons);
+      });
     }
   };
 
@@ -66,7 +73,7 @@ const App = () => {
         onNumberChange={handleNumberChange}
       />
       <h3>Numbers</h3>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} deletePerson={deletePerson} />
     </div>
   );
 };
