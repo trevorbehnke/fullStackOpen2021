@@ -32,9 +32,9 @@ const App = () => {
           return countriesToShow.map((country) => {
             return <div key={country.name}>{country.name}</div>;
           });
-        } else {
+        } else if (countriesToShow.length === 1) {
           // Pick Up Here!!!
-          return <div>There is 1 remaining</div>;
+          return <div>Only 1 remaining!</div>;
         }
       })()}
     </div>
