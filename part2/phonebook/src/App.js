@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 
 import personService from "./services/persons";
 
@@ -10,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filtered, setFiltered] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
@@ -31,11 +33,15 @@ const App = () => {
         setNewName("");
         setNewNumber("");
       });
+      setErrorMessage(`Added ${newName} to phonebook!`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
     }
   };
 
   const deletePerson = (id) => {
-    const result = window.confirm(`Delete ${id}?`);
+    const result = window.confirm(`Delete this person?`);
     if (result === true) {
       personService.remove(id);
       personService.getAll().then((newPersons) => {
@@ -65,6 +71,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter filtered={filtered} handleChange={handleFilterChange} />
       <h3>Add a new</h3>
+      <Notification message={errorMessage} />
       <PersonForm
         onSubmit={addPerson}
         nameValue={newName}
