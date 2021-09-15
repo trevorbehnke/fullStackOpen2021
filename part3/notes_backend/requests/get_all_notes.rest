@@ -1,0 +1,22 @@
+GET http://localhost:3001/api/notes/
+
+###
+POST http://localhost:3001/api/notes
+content-type: application/json
+
+{
+  "content": "lol",
+  "important": true
+}
+
+###
+DELETE http://localhost:3001/api/notes/6136d8a3ad26817fc91c3d34
+
+###
+PUT http://localhost:3001/api/notes/6136dc4d6c622543138c04b0
+content-type: application/json
+
+{
+  "content": "When do I get REAL paid?",
+  "important": true
+}
